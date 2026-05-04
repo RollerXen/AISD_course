@@ -1,0 +1,109 @@
+name: Auto Test Labs
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-lab1-bst:
+    name: Test lab1_binTrees
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false  # Не останавливать при ошибке одного студента
+      matrix:
+        student: [ivanov, petrov, sidorov, kozlov, smirnov]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential g++-11
+    
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_CXX_COMPILER=g++-11
+    
+    - name: Build binTrees tests for ${{ matrix.student }}
+      run: |
+        cd build
+        make bst_${{ matrix.student }}
+    
+    - name: Run binTrees tests for ${{ matrix.student }}
+      id: bst_test
+      continue-on-error: true
+      run: |
+        cd build
+        ./bst_${{ matrix.student }}
+    
+    - name: Report binTrees result
+      if: always()
+      run: |
+        if [ ${{ steps.bst_test.outcome }} == 'success' ]; then
+          echo "✅ BST tests for ${{ matrix.student }} passed"
+        else
+          echo "❌ BST tests for ${{ matrix.student }} failed"
+        fi
+
+  test-lab2-rbt:
+    name: Test RBT (Lab 2)
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        student: [ivanov, petrov, sidorov, kozlov, smirnov]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential g++-11
+    
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_CXX_COMPILER=g++-11
+    
+    - name: Build RBT tests for ${{ matrix.student }}
+      run: |
+        cd build
+        make rbt_${{ matrix.student }}
+    
+    - name: Run RBT tests for ${{ matrix.student }}
+      id: rbt_test
+      continue-on-error: true
+      run: |
+        cd build
+        ./rbt_${{ matrix.student }}
+    
+    - name: Report RBT result
+      if: always()
+      run: |
+        if [ ${{ steps.rbt_test.outcome }} == 'success' ]; then
+          echo "✅ RBT tests for ${{ matrix.student }} passed"
+        else
+          echo "❌ RBT tests for ${{ matrix.student }} failed"
+        fi
+  
+  summary:
+    name: Summary
+    runs-on: ubuntu-latest
+    needs: [test-lab1-bst, test-lab2-rbt]
+    if: always()
+    steps:
+    - run: |
+        echo "## 📊 Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All configured tests have completed" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Check individual job results above for details." >> $GITHUB_STEP_SUMMARY
