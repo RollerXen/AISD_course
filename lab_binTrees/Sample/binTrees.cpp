@@ -1,31 +1,47 @@
 #include "binTrees.h"
 
+#include "binTrees.h"
+
+// ============= node =============
 template <typename T>
-binTree::binTree() {
-	//put your code here!
+node<T>::node(const T& val)
+    : value(val), right(nullptr), left(nullptr) {
+}
+
+// ============= binTree =============
+
+template <typename T>
+binTree<T>::binTree() {
+    // TODO: реализовать конструктор
+    root = nullptr;
+    nodeCount = 0;
 }
 
 template <typename T>
-binTree::binTree(binTree<T>& other) {
-
+binTree<T>::binTree(const binTree<T>& other) {
+    // TODO: реализовать конструктор копирования
+    root = nullptr;
+    nodeCount = 0;
 }
 
 template <typename T>
-binTree::~binTree() {
-
+binTree<T>::~binTree() {
+    // TODO: реализовать деструктор
 }
 
 template <typename T>
-void binTree::insert(const T& val) {
-
+void binTree<T>::insert(const T& val) {
+    // TODO: реализовать вставку элемента
 }
 
 template <typename T>
-void binTree::remove(const T& val) {
-
+bool binTree<T>::remove(const T& val) {
+    // TODO: реализовать удаление элемента
+    return false;
 }
 
 template <typename T>
-bool binTree::find(const T& val) {
-
+bool binTree<T>::find(const T& val) {
+    // TODO: реализовать поиск элемента
+    return false;
 }
