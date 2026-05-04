@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-project(AISD_course)
+project(CppCourse)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Подключаем Google Test
+# Подключаем Google Test глобально
 include(FetchContent)
 FetchContent_Declare(
     googletest
@@ -14,16 +14,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # Включаем поддиректории с лабораторными
-add_subdirectory(lab1_binTrees)
-add_subdirectory(lab2_RBTrees)
+add_subdirectory(lab1_binTree)
+add_subdirectory(lab2_RBTree)
 
-# Общая цель для запуска всех тестов
 add_custom_target(run_all_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     COMMENT "Running all tests from all labs..."
 )
-
-message(STATUS "=========================================")
-message(STATUS "Succesfully configured!")
-message(STATUS "Labs: lab1_binTrees, lab2_RBTrees")
-message(STATUS "=========================================")
